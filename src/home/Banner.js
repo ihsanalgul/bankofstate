@@ -29,7 +29,7 @@ function Banner() {
             onExited={() => setAnimating(false)}
             key={item.src}
           >
-            <img src={item.src} />
+            <img src={item.src} alt="img" />
           </CarouselItem>
         );
       });
