@@ -1,6 +1,7 @@
 import './App.css';
 import {BrowserRouter as Router ,Switch , Route} from "react-router-dom";
 import Header from "./header/Header";
+import Footer from "./footer/Footer";
 import Home from './home/Home';
 
 
@@ -16,6 +17,7 @@ function App() {
       <Route path="/register"><h1> Register </h1></Route>
       <Route path="/" component={Home}/>
       </Switch>
+      <Footer />
        </div>
     </Router>
    
