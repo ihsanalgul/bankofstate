@@ -5,6 +5,7 @@ import Header from "./header/Header";
 import Footer from "./footer/Footer";
 import Home from './home/Home';
 import Login from "./login/Login";
+import Register from "./register/Register";
 
 
 function App() {
@@ -16,7 +17,7 @@ function App() {
       <Switch>
       <Route path="/login"> <Login/> </Route>
       <Route path="/logout"><h1> Logout</h1> </Route>
-      <Route path="/register"><h1> Register </h1></Route>
+      <Route path="/register"><Register /></Route>
       <Route path="/" component={Home}/>
       </Switch>
       <Footer />

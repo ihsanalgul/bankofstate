@@ -30,9 +30,9 @@ const RegistrationForm = (props) => (
               type="text"
               label="First Name"
             />
-            {props.errors.firstName && props.touched.firstName ? (
+       {/*      {props.errors.firstName && props.touched.firstName ? (
               <div>{props.errors.firstName}</div>
-            ) : null}
+            ) : null} */}
           </div>
           <div className="col-lg-2 text-center p-3">
             <Field
@@ -41,9 +41,9 @@ const RegistrationForm = (props) => (
               type="text"
               label="Last Name"
             />
-            {props.errors.lastName && props.touched.lastName ? (
+         {/*    {props.errors.lastName && props.touched.lastName ? (
               <div>{props.errors.lastName}</div>
-            ) : null}
+            ) : null} */}
           </div>
         </div>
         <div className="row justify-content-start">
@@ -79,9 +79,9 @@ const RegistrationForm = (props) => (
               type="email"
               label="Email"
             />
-            {props.errors.email && props.touched.email ? (
+         {/*    {props.errors.email && props.touched.email ? (
               <div>{props.errors.email}</div>
-            ) : null}
+            ) : null} */}
           </div>
         </div>
         <div className="row justify-content-start">
@@ -92,9 +92,9 @@ const RegistrationForm = (props) => (
               label="Password"
               name="password"
             />
-            {props.errors.password && props.touched.password ? (
+          {/*   {props.errors.password && props.touched.password ? (
               <div>{props.errors.password}</div>
-            ) : null}
+            ) : null} */}
           </div>
           <div className="col-lg-2 p-3">
             <Field
@@ -103,9 +103,9 @@ const RegistrationForm = (props) => (
               label="Confirm Password"
               name="confirmPassword"
             />
-            {props.errors.confirmpassword && props.touched.confirmpassword ? (
+         {/*    {props.errors.confirmpassword && props.touched.confirmpassword ? (
               <div>{props.errors.confirmpassword}</div>
-            ) : null}
+            ) : null} */}
             {props.isSubmitting && <LinearProgress />}
           </div>
         </div>
@@ -123,7 +123,12 @@ const RegistrationForm = (props) => (
           </div>
         </div>
       </Form>
-    </fieldset>
+      </fieldset> 
+      <div className="row justify-content-start">
+          <div className="col-lg-12 text-center">
+            {props.isSubmitting && <LinearProgress />}
+          </div>
+        </div>  
   </div>
 );
 const Register = () => {
