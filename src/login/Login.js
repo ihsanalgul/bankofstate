@@ -2,12 +2,17 @@ import * as React from "react";
 import { Formik, Form, Field } from "formik";
 import { Button, LinearProgress } from "@material-ui/core";
 import { TextField } from "formik-material-ui";
+import service from "../service/bankService";
+import { ToastContainer, toast } from "react-toastify";
+import { useStateValue } from "../StateProvider";
+import { useHistory } from "react-router";
+import "react-toastify/dist/ReactToastify.css";
 import * as Yup from "yup";
 import "./Login.css";
 
 const LoginSchema = Yup.object().shape({
-  password: Yup.string().required("Password is mandatory !"),
-  email: Yup.string().email("Invalid email").required("Email is mandatory !"),
+  password: Yup.string().required("Required"),
+  username: Yup.string().required("Required"),
 });
 
 const LoginForm = (props) => (
@@ -19,13 +24,10 @@ const LoginForm = (props) => (
           <div className="col-lg-2 text-center p-3">
             <Field
               component={TextField}
-              name="email"
-              type="email"
-              label="Email"
+              name="username"
+              type="text"
+              label="User Name"
             />
-            {/* {props.errors.email && props.touched.email ? (
-              <div>{props.errors.email}</div>
-            ) : null} */}
           </div>
           <div className="col-lg-2 text-center p-3">
             <Field
@@ -34,13 +36,9 @@ const LoginForm = (props) => (
               label="Password"
               name="password"
             />
-            {/* {props.errors.password && props.touched.password ? (
-              <div>{props.errors.password}</div>
-            ) : null} */}
-           
+            {props.isSubmitting && <LinearProgress />}
           </div>
         </div>
-       
         <div className="row justify-content-start">
           <div className="col-lg-4 text-center p-3">
             <Button
@@ -55,25 +53,52 @@ const LoginForm = (props) => (
           </div>
         </div>
       </Form>
-    </fieldset> <div className="col-lg-12"> {props.isSubmitting && <LinearProgress />}</div>
+    </fieldset>
   </div>
 );
 const Login = () => {
+  const history = useHistory();
+  const [{ userInfo }, dispatch] = useStateValue();
   return (
-    <Formik
-      initialValues={{
-        email: "",
-        password: "",
-      }}
-      validationSchema={LoginSchema}
-      onSubmit={(values, actions) => {
-        setTimeout(() => {
+    <div>
+      <Formik
+        initialValues={{
+          username: "",
+          password: "",
+        }}
+        validationSchema={LoginSchema}
+        onSubmit={(values, actions) => {
+          service.login(values).then((response) => {
+            if (response.status === 200) {
+              const userInfo = response.data;
+              localStorage.setItem(
+                "auth",
+                JSON.stringify({
+                  token: userInfo.jwt,
+                })
+              );
+              dispatch({
+                type: "LOGIN",
+                item: userInfo,
+              });
+              if (userInfo?.user?.isAdmin) {
+                history.push("/admin");
+              } else {
+                history.push("/user");
+              }
+              toast.success("Login Successful", {
+                position: toast.POSITION.TOP_CENTER,
+              });
+            
+              actions.resetForm();
+            }
+          });
           actions.setSubmitting(false);
-          alert(JSON.stringify(values));
-        }, 500);
-      }}
-      component={LoginForm}
-    ></Formik>
+        }}
+        component={LoginForm}
+      ></Formik>
+      <ToastContainer />
+    </div>
   );
 };
 export default Login;
