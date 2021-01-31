@@ -28,8 +28,7 @@ const AccountInfo = () => {
               </CardIcon>
               <p className={classes.cardCategory}>Account Number</p>
               <h3 className={classes.cardTitle}>
-                {/* {userInfo.user.accountNumber} */}
-                123456975
+                {userInfo.user.accountNumber}
               </h3>
             </CardHeader>
           </Card>
