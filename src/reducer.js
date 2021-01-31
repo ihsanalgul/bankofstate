@@ -6,6 +6,8 @@ export const initialState = {
   const reducer = (state, action) => {
     switch (action.type) {
       case "LOGIN":
+      case "LOGOUT":
+      case "UPDATE":
         return{...state, userInfo: action.item};
       case "ADD_TO_CART":
         return {
