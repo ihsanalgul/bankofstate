@@ -1,6 +1,5 @@
 import React from "react";
 import { useStateValue } from "../StateProvider";
-import { useHistory } from "react-router";
 import { makeStyles } from "@material-ui/core/styles";
 // @material-ui/icons
 import AccountBalanceWalletIcon from "@material-ui/icons/AccountBalanceWallet";

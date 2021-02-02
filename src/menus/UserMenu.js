@@ -23,7 +23,7 @@ const UserMenu = () => {
     setAnchorEl(null);
   };
   const handleWithdrawal = () => {
-    history.push("/withdrawal");
+    history.push("/withdraw");
     setAnchorEl(null);
   };
   const handleTransfer = () => {

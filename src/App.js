@@ -9,6 +9,7 @@ import Register from "./register/Register";
 import User from './user/User';
 import Admin from './admin/Admin';
 import Deposit from './deposit/Deposit';
+import Withdraw from './withdraw/Withdraw';
 import Logout from './logout/Logout';
 
 
@@ -26,6 +27,7 @@ function App() {
       <Route path="/logout"><h1> Logout</h1> </Route>
       <Route path="/register"><Register /></Route>
       <Route path="/deposit"><Deposit /></Route>
+      <Route path="/withdraw"><Withdraw /></Route>
       <Route path="/" component={Home}/>
       </Switch>
       <Footer />
