@@ -11,6 +11,7 @@ import Admin from './admin/Admin';
 import Deposit from './deposit/Deposit';
 import Withdraw from './withdraw/Withdraw';
 import Logout from './logout/Logout';
+import AddRecipient from './transfer/AddRecipient';
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
       <Route path="/register"><Register /></Route>
       <Route path="/deposit"><Deposit /></Route>
       <Route path="/withdraw"><Withdraw /></Route>
+      <Route path="/addRecipient"><AddRecipient /></Route>
       <Route path="/" component={Home}/>
       </Switch>
       <Footer />

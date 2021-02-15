@@ -104,7 +104,7 @@ const Deposit = () => {
           </div>
           <Divider />
           <h1 className={classes.infoText}>Transactions</h1>
-          <Transactions></Transactions>
+          <Transactions />
         </div>
       )}
     </div>
