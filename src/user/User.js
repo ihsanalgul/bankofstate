@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useStateValue } from "../StateProvider";
 import { useHistory } from "react-router";
@@ -19,65 +20,76 @@ import CardIcon from "../components/Card/CardIcon.js";
 import CardFooter from "../components/Card/CardFooter.js";
 import PlotlyChart from "../chart/PlotlyChart";
 import styles from "../styles/dashboardStyle.js";
+
 import _ from "lodash";
 
 const useStyles = makeStyles(styles);
 
-
-
-const transferData = [
-  {
-    type: "funnel",
-    x: [3500, 3000, 2800, 2500, 2000, 1000, 500],
-    y: ["5/Jan", "8/Jan", "2/Jan", "1/Jan", "7/Jan", "3/Jan", "10/Jan"],
-    hoverinfo: "percent total+x",
-  },
-];
 const User = () => {
   const classes = useStyles();
   const [{ userInfo }] = useStateValue();
   const history = useHistory();
   const transactions = userInfo.user.transactions;
-  const uniqDates = _.uniq(_.map(transactions,"date")).sort();
+  const uniqDates = _.uniq(_.map(transactions, "date")).sort();
+  let totalRecipients = 0;
+  if (userInfo?.user?.recipients?.length > 0) {
+    totalRecipients = userInfo.user.recipients.length;
+  }
   const depositArray = [];
   const withdrawalArray = [];
-
-  uniqDates.forEach(function(key) {
-    const deposit = _.filter(transactions, function (transaction) {
-      return transaction.type === 'DEPOSIT' && transaction.date=== key;
+  const transferArray = [];
+  uniqDates.forEach(function (key) {
+    const deposits = _.filter(transactions, function (tran) {
+      return tran.type === "DEPOSIT" && tran.date === key;
+    });
+    const withdraws = _.filter(transactions, function (tran) {
+      return tran.type === "WITHDRAW" && tran.date === key;
     });
 
-    const withdraw = _.filter(transactions, function (transaction) {
-      return transaction.type === 'WITHDRAW' && transaction.date=== key;
+    const transfers = _.filter(transactions, function (tran) {
+      return tran.isTransfer && tran.date === key;
     });
+    const depositAmounts = _.map(deposits, "amount");
+    const depositSum = _.sum(depositAmounts);
+    depositArray.push(depositSum);
 
-    const depositAmounts = _.map(deposit,"amount");
-    const withdrawAmounts = _.map(withdraw,"amount");
-    const sumOfDeposits = _.sum(depositAmounts);
-    const sumOfWithdraws = _.sum(withdrawAmounts);
-    depositArray.push(sumOfDeposits);
-    withdrawalArray.push(sumOfWithdraws);
+    const withdrawAmounts = _.map(withdraws, "amount");
+    const withdrawSum = _.sum(withdrawAmounts);
+    withdrawalArray.push(withdrawSum);
 
+    const transferAmounts = _.map(transfers, "amount");
+    const transferSum = _.sum(transferAmounts);
+    const transferObject = {
+      date: key.substring(0, 5),
+      amount: transferSum,
+    };
+    transferArray.push(transferObject);
   });
-
-  const totalDeposit = _.sum(depositArray);
-  const totalWithdrawal = _.sum(withdrawalArray);
-
-  const depositData = [
+  const orderedTransferArray = _.orderBy(transferArray, ["amount"]).reverse();
+  const barData = [
     {
       type: "bar",
       x: uniqDates,
       y: depositArray,
     },
   ];
-
-  const withdrawalData = [
+  const scatterData = [
     {
       type: "scatter",
       x: uniqDates,
       y: withdrawalArray,
     },
   ];
+  const transferData = [
+    {
+      type: "funnel",
+      x: _.map(orderedTransferArray, "amount"),
+      y: _.map(orderedTransferArray, "date"),
+      hoverinfo: "percent total+x",
+    },
+  ];
+  const totalDeposit = _.sum(depositArray);
+  const totalWithdraw = _.sum(withdrawalArray);
   return (
     <div>
       {!userInfo && history.push("/login")}
@@ -92,7 +104,7 @@ const User = () => {
                   </CardIcon>
                   <p className={classes.cardCategory}>Balance</p>
                   <h3 className={classes.cardTitle}>
-                    $ {userInfo.user.accountBalance}
+                    ${userInfo.user.accountBalance}
                   </h3>
                 </CardHeader>
                 <CardFooter stats>
@@ -110,7 +122,7 @@ const User = () => {
                     <AttachMoney />
                   </CardIcon>
                   <p className={classes.cardCategory}>Deposits</p>
-                  <h3 className={classes.cardTitle}>$ {totalDeposit}</h3>
+                  <h3 className={classes.cardTitle}>${totalDeposit}</h3>
                 </CardHeader>
                 <CardFooter stats>
                   <div className={classes.stats}>
@@ -127,7 +139,7 @@ const User = () => {
                     <AccountBalanceWallet />
                   </CardIcon>
                   <p className={classes.cardCategory}>Withdrawals</p>
-                  <h3 className={classes.cardTitle}>$ {totalWithdrawal}</h3>
+                  <h3 className={classes.cardTitle}>${totalWithdraw}</h3>
                 </CardHeader>
                 <CardFooter stats>
                   <div className={classes.stats}>
@@ -144,7 +156,7 @@ const User = () => {
                     <Accessibility />
                   </CardIcon>
                   <p className={classes.cardCategory}>Recipients</p>
-                  <h3 className={classes.cardTitle}>5</h3>
+                  <h3 className={classes.cardTitle}>{totalRecipients}</h3>
                 </CardHeader>
                 <CardFooter stats>
                   <div className={classes.stats}>
@@ -162,7 +174,7 @@ const User = () => {
                   <h4 color="white">Deposit Trends</h4>
                 </CardHeader>
                 <CardBody>
-                  <PlotlyChart data={depositData} />
+                  <PlotlyChart data={barData} />
                 </CardBody>
               </Card>
             </GridItem>
@@ -172,7 +184,7 @@ const User = () => {
                   <h4 color="white">Withdrawal Trends</h4>
                 </CardHeader>
                 <CardBody>
-                  <PlotlyChart data={withdrawalData} />
+                  <PlotlyChart data={scatterData} />
                 </CardBody>
               </Card>
             </GridItem>

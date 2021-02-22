@@ -11,7 +11,9 @@ import Admin from './admin/Admin';
 import Deposit from './deposit/Deposit';
 import Withdraw from './withdraw/Withdraw';
 import Logout from './logout/Logout';
+import Transfer from './transfer/Transfer';
 import AddRecipient from './transfer/AddRecipient';
+import UserMgmt from './admin/UserMgmt';
 
 
 function App() {
@@ -30,6 +32,8 @@ function App() {
       <Route path="/deposit"><Deposit /></Route>
       <Route path="/withdraw"><Withdraw /></Route>
       <Route path="/addRecipient"><AddRecipient /></Route>
+      <Route path="/transfer"><Transfer /></Route>
+      <Route path="/userMgmt"><UserMgmt /></Route>
       <Route path="/" component={Home}/>
       </Switch>
       <Footer />
